@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusPulse | College Event Management</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+        header { background: #0f172a; color: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        nav a { color: #cbd5e1; text-decoration: none; margin-left: 1.5rem; font-weight: 500; }
+        .hero { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; text-align: center; padding: 4rem 1.5rem; }
+        .hero h2 { font-size: 2.4rem; margin-bottom: 0.75rem; }
+        .btn { display: inline-block; background: var(--primary); color: white; padding: 0.7rem 1.4rem; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; text-decoration: none; }
+        .container { max-width: 1100px; margin: 2.5rem auto; padding: 0 1.5rem; }
+        .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .event-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+        .badge { display: inline-block; background: #dbeafe; color: var(--primary-dark); font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 20px; margin-bottom: 0.75rem; width: fit-content; }
+        .forms-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .form-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 0.35rem; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.65rem; border: 1px solid var(--border); border-radius: 6px; }
+        .status-msg { margin-top: 0.75rem; font-size: 0.9rem; font-weight: 600; color: #16a34a; }
+        footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 1.5rem; margin-top: 4rem; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>CampusPulse</h1>
+    <nav>
+        <a href="#events">Events</a>
+        <a href="#register">Register</a>
+        <a href="#admin">Add Event</a>
+    </nav>
+</header>
+<section class="hero">
+    <h2>Discover & Manage Campus Events</h2>
+    <p>Your central hub for college fests, technical workshops, hackathons, and cultural nights.</p>
+    <a href="#events" class="btn" style="background: white; color: var(--primary);">Explore Upcoming Events</a>
+</section>
+<main class="container">
+    <section id="events">
+        <h2 style="font-size: 1.75rem; margin-bottom: 1.25rem; border-left: 4px solid var(--primary); padding-left: 0.75rem;">Upcoming Events</h2>
+        <div class="events-grid" id="eventsContainer"></div>
+    </section>
+    <section class="forms-wrapper">
+        <div class="form-box" id="register">
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Student Registration</h2>
+            <form id="registrationForm">
+                <div class="form-group"><label>Full Name</label><input type="text" id="studentName" required /></div>
+                <div class="form-group"><label>College ID</label><input type="text" id="studentId" required /></div>
+                <div class="form-group"><label>College Email</label><input type="email" id="studentEmail" required /></div>
+                <div class="form-group"><label>Select Event</label><select id="eventSelect" required></select></div>
+                <button type="submit" class="btn">Confirm Registration</button>
+                <p class="status-msg" id="regStatus"></p>
+            </form>
+        </div>
+        <div class="form-box" id="admin">
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Organizer: Post New Event</h2>
+            <form id="addEventForm">
+                <div class="form-group"><label>Event Title</label><input type="text" id="eventTitle" required /></div>
+                <div class="form-group"><label>Category</label><select id="eventCategory"><option value="Technical">Technical</option><option value="Cultural">Cultural</option><option value="Sports">Sports</option><option value="Workshop">Workshop</option></select></div>
+                <div class="form-group"><label>Date & Venue</label><input type="text" id="eventDate" required /></div>
+                <div class="form-group"><label>Description</label><textarea id="eventDesc" rows="2" required></textarea></div>
+                <button type="submit" class="btn">Publish Event</button>
+                <p class="status-msg" id="eventStatus"></p>
+            </form>
+        </div>
+    </section>
+</main>
+<footer><p>&copy; 2026 CampusPulse College Event Management System. All rights reserved.</p></footer>
+<script>
+    const events = [
+        { title: "HackInnovate 2026", category: "Technical", meta: "Nov 28, 2026 • CS Block", desc: "A 24-hour inter-college hackathon." },
+        { title: "Rhythm & Vibes Fest", category: "Cultural", meta: "Dec 05, 2026 • Amphitheater", desc: "Live student bands and cultural acts." },
+        { title: "UI/UX Bootcamp", category: "Workshop", meta: "Dec 10, 2026 • Seminar Hall", desc: "Hands-on Figma workshop." }
+    ];
+    const eventsContainer = document.getElementById("eventsContainer");
+    const eventSelect = document.getElementById("eventSelect");
+    function renderEvents() {
+        eventsContainer.innerHTML = "";
+        eventSelect.innerHTML = "";
+        events.forEach((ev) => {
+            const card = document.createElement("div");
+            card.className = "event-card";
+            card.innerHTML = `<div><span class="badge">${ev.category}</span><h3>${ev.title}</h3><div style="font-size:0.9rem;color:#64748b;margin-bottom:1rem;">${ev.meta}</div><p>${ev.desc}</p></div><a href="#register" class="btn" style="margin-top:1rem;" onclick="document.getElementById('eventSelect').value='${ev.title}';">Register Now</a>`;
+            eventsContainer.appendChild(card);
+            const option = document.createElement("option");
+            option.value = ev.title; option.textContent = ev.title;
+            eventSelect.appendChild(option);
+        });
+    }
+    document.getElementById("registrationForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        document.getElementById("regStatus").textContent = `Success! ${document.getElementById("studentName").value} is registered for "${eventSelect.value}".`;
+        this.reset();
+    });
+    document.getElementById("addEventForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        events.push({
+            title: document.getElementById("eventTitle").value,
+            category: document.getElementById("eventCategory").value,
+            meta: document.getElementById("eventDate").value,
+            desc: document.getElementById("eventDesc").value
+        });
+        renderEvents();
+        document.getElementById("eventStatus").textContent = `Event published!`;
+        this.reset();
+    });
+    renderEvents();
+</script>
+</body>
+</html>
